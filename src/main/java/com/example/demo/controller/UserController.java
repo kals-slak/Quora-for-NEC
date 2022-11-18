@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,8 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.Auth;
 import com.example.demo.dao.UserRepo;
 import com.example.demo.model.users;
+
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -41,6 +45,20 @@ public class UserController {
 		System.out.println("im i n");
 		ur.save(u);
 		return u;
+	}
+	@PostMapping("/user/auth")
+	public int authUser(@RequestBody Auth a) {
+		System.out.println(a.getEmail());
+		Optional<users> u = ur.isValidUser(a.getEmail(),a.getPass());
+		if(u.isEmpty()) {
+			return -1;
+		}
+		else {
+			System.out.println(u.get().getUid());
+			return u.get().getUid();
+		}
+		//return 1;
+		
 	}
 	
 	
